@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<style type="text/css">
+		.active{
+			background-color: yellow;
+		}
+		
+		div{
+			width: 200px;
+			height:200px;
+			background-color: red;
+			border: 1px solid #CCCCCC;
+			display: none;
+			font-size: 50px;
+			text-align: center;
+			line-height: 200px;
+		}
+		.show{
+			display: block;
+		}
+		
+	</style>
+	
+</head>
+<body>
+	<input class="active" type="button"  value="按钮1" />
+	<input type="button"  value="按钮2" />
+	<input type="button"  value="按钮3" />
+
+	<div class="show">A</div>
+	<div>B</div>
+	<div>C</div>
+
+	
+</body>
+<script type="text/javascript">
+	var inputs = document.querySelectorAll("input");
+	var divs = document.querySelectorAll("div");
+//功能：选择第i个input时，该input背景颜色为黄，第i个div状态变为显示；其他
+//input颜色为空，其他div状态为隐藏。
+	for(var i=0; i<inputs.length ; i++){
+		inputs[i].index=i;
+		inputs[i].onclick=function(){
+			for(var i=0 ; i<inputs.length ; i++){
+				inputs[i].className="";
+				divs[i].className="";
+			}
+//			先把状态都清空
+			this.className="active";
+			divs[this.index].className="show";
+		}
+	}
+
+</script>
+</html>

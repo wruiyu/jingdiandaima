@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		.wrap{
+			width: 1000px;
+			height: 600px;
+			position: relative;
+			overflow: hidden;
+		}	
+		#middle{
+			height:600px;
+			/*width: ;*/
+			position: absolute;
+			top: 0;
+			left:0;
+			-webkit-transition: all 1s;
+			-moz-transition: all 1s;
+			-ms-transition: all 1s;
+			-o-transition: all 1s;
+			transition: all 1s;
+			
+		}
+		#middle>img{
+			float: left;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div id="middle">
+				<img src="images/1.jpg" alt="" />
+				<img src="images/2.jpg" alt="" />
+				<img src="images/3.jpg" alt="" />
+				<img src="images/4.jpg" alt="" />
+			</div>
+		</div>
+		<input type="button" id="last" value="last"/>
+		<input type="button" id="next" value="next"/>
+		<div id="wrap">
+			<input type="button" value="第1张"/>
+			<input type="button" value="第2张"/>
+			<input type="button" value="第3张"/>
+			<input type="button" value="第4张"/>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var imgs = document.querySelectorAll("#middle>img");
+		var next = document.querySelector("#next");
+		var last = document.querySelector("#last");
+		var wrap = document.querySelector(".wrap");
+		var middle = document.querySelector("#middle");
+		var inputs = document.querySelectorAll("#wrap>input");
+		var w = wrap.offsetWidth;
+		middle.style.width=imgs.length*w+"px";
+		var timer = null;
+//		功能：正向遍历函数
+		var index=0;
+		
+		function nextFn(){
+			index++;
+			if(index>imgs.length-1){
+				index=0;
+			}
+			var l = -index*w;
+			middle.style.left=l+"px";
+		}
+		timer = setInterval(function(){
+			nextFn();
+		},2000);
+//		功能：按下next键，正向遍历一次，同时定时器先关后开
+		next.onclick=function(){
+			nextFn();
+			resetTimer();
+//			clearInterval(timer);
+//			timer = setInterval(function(){
+//			nextFn();
+//		},3000);	
+		}
+//		封函数：定时器先关后开函数
+		function resetTimer(){
+			clearInterval(timer);
+			timer = setInterval(function(){
+			nextFn();
+		},2000);	
+		}
+//		功能：按下last键，反向遍历一次，同时定时器先关后开
+		last.onclick=function(){
+			index--;
+			if(index<0){
+				index=imgs.length-1;
+			}
+			var l = -index*w;
+			middle.style.left=l+"px";
+			resetTimer();
+		}
+//		功能：按下第几个按钮，出现第几张，同时重置定时器
+		for(var i=0; i<inputs.length; i++){
+			inputs[i].index=i;
+			inputs[i].onclick=function(){
+				index=this.index;
+				var l = -index*w;
+				middle.style.left=l+"px";
+				resetTimer();
+			}
+		}
+//		功能：鼠标移入，停止滚动；鼠标移出，恢复滚动
+		wrap.onmouseover=function(){
+			clearInterval(timer);
+		}
+		wrap.onmouseout=function(){
+			resetTimer();
+		}
+			
+		
+	</script>
+</html>

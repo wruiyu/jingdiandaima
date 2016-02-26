@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.wrap{
+				width: 200px;
+				height: 200px;
+				position: relative;
+				overflow: hidden;
+			}
+			#middle{
+				/*width: ;*/
+				height: 200px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				font-size: 50px;
+				-webkit-transition: all 0.5s;
+				-moz-transition: all 0.5s;
+				-ms-transition: all 0.5s;
+				-o-transition: all 0.5s;
+				transition: all 0.5s;
+				
+			}
+			#middle>div{
+				width: 200px;
+				height: 200px;
+				background-color: #CCCCCC;
+				text-align: center;
+				line-height: 200px;
+				float: left;
+			}
+		</style>
+	</head>
+	<body>
+		<input type="button" name="next" id="next" value="next" />
+		<input type="button" name="last" id="last" value="last" />
+		
+		<div id="wrap">
+			<input type="button" value="按钮1" />
+			<input type="button" value="按钮2" />
+			<input type="button" value="按钮3" />
+			<input type="button" value="按钮4" />
+		</div>
+		<div class="wrap">
+			<div id="middle">
+				<div>div1</div>
+				<div>div2</div>
+				<div>div3</div>
+				<div>div4</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var wrap = document.querySelector(".wrap");
+		var middle = document.querySelector("#middle");
+		var divs = document.querySelectorAll("#middle>div");
+		var next = document.querySelector("#next");
+		var last = document.querySelector("#last");
+		var inputs = document.querySelectorAll("#wrap>input");
+		var index = 0;
+		var w = wrap.offsetWidth;
+		middle.style.width = divs.length*w+"px";
+//功能：实现大图从头到尾滚动,正向遍历，用循环定时器不间断调用正向遍历函数。
+//在循环定时器里写正遍历函数	
+
+//对正向遍历函数封函数
+		function nextFn(){
+			index++;
+			if(index>divs.length-1){
+				index=0;
+			}
+			var l = -index*w;
+			middle.style.left=l+"px";
+		}
+//循环定时器不间断调用正向遍历函数
+		var timer = setInterval(function(){
+	     	nextFn();
+	    },2000);
+//对循环定时器重置封函数	    
+		function resetTimer(){
+			clearInterval(timer);
+			timer = setInterval(function(){
+	     	nextFn();
+	    },2000);	
+		}
+	    
+	     
+//功能：按下next按钮，正向遍历一次，同时重置一次循环定时器	
+		next.onclick=function(){
+			nextFn();
+			resetTimer();
+		}
+//功能：按下last按钮，反向遍历一次，同时重置一下循环定时器	     
+		last.onclick = function(){
+			index--;
+			if(index<0){
+				index=divs.length-1;
+			}
+			var l = -index*w;
+			middle.style.left=l+"px";
+			resetTimer();
+		}
+//功能：随意按下按钮1～按钮4，显示相应的div，同时重置一下循环定时器
+		for(var i=0,len=divs.length; i<len ; i++){
+			inputs[i].index=i;
+			inputs[i].onclick=function(){
+				index=this.index;
+				var l = -index*w;
+				middle.style.left=l+"px";
+				resetTimer();
+			}
+		}
+//功能：鼠标移入，停止滚动（清除循环定时器）；鼠标移出，继续滚动（重置循环定时器）
+		wrap.onmouseover=function(){
+			clearInterval(timer);
+		}
+		wrap.onmouseout=function(){
+			resetTimer();
+		}
+		
+	</script>
+</html>

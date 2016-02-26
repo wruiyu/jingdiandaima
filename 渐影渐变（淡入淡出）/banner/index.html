@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0
+	}
+	ul{
+		list-style: none;
+	}
+	#wrap{
+		position: relative;/*图片父级相对定位；*/
+	}
+	#wrap li{
+		position: absolute;/*图片绝对定位，重叠在一起；*/
+		width: 100%;/*背景图宽100%，不设具体数值，否则页面缩小时会出现滚动条；*/
+		height: 463px;
+		background-position: center 0;/*背景图位置：左右居中，上下为零；*/
+		opacity: 0;
+		z-index: 0;
+	}
+	#banner{
+		position: relative;
+		width: 100%;
+		height: 463px;
+	}
+	#btnWrap{/*btnWrap的父级是banner，所以要对banner进行相对定位*/
+		position: absolute;
+		right: 60px;
+		bottom: 30px;
+		z-index: 2;
+		/*background-color: #ccc;*/
+	}
+	#btnWrap li{
+		float: left;
+		width: 20px;
+		height: 20px;
+		background-color: white;
+		border-radius: 10px;
+		margin: 10px;
+	}
+	#btnWrap li.active{
+		background-color: skyblue;
+	}
+	</style>
+</head>
+<body>
+	<div id="banner">
+		<ul id="wrap">
+			<li style="background-image:url(images/1.jpg); opacity:1; z-index:1"></li>
+			<li style="background-image:url(images/2.jpg)"></li><!--渐影渐变的图片是背景图-->
+			<li style="background-image:url(images/3.jpg)"></li>
+			<li style="background-image:url(images/4.jpg)"></li>
+		</ul>
+		<ul id="btnWrap">
+			<li class="active"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	
+</body>
+<script type="text/javascript">
+//功能：透明度变化，渐影渐变；
+
+window.onload = function (){//当html，css，js加载完毕时执行；
+
+	// var arr = ["images/1.jpg"];
+	var wrap = document.getElementById("wrap");
+	var imgs = wrap.children;
+	var btnWrap = document.getElementById("btnWrap");
+	var btns = btnWrap.children;
+
+	function hide(obj){//隐藏函数
+
+		obj.opacity = 1;
+		obj.hideTimer = setInterval(function (){
+
+			obj.opacity-=0.1;
+			if (obj.opacity<=0){
+				clearInterval(obj.hideTimer);
+			}
+			obj.style.opacity = obj.opacity;
+		}, 50);
+	}
+	function show(obj){//显示函数；
+		obj.opacity = 0;
+		obj.showTimer = setInterval(function (){
+
+			obj.opacity+=0.1;
+			if (obj.opacity >= 1){
+				clearInterval(obj.showTimer);
+			}
+			obj.style.opacity = obj.opacity;
+		}, 50);
+	}
+	
+//功能：显示当前张，隐藏上一张，同时当前的下标为active
+	var lastImg = imgs[0];
+	for (var i=0; i<btns.length; i++){
+
+		btns[i].index = i;
+		btns[i].onclick = function (){
+			if (lastImg==imgs[this.index]){//if判断里用双等号表示判断是否相等；
+				return;
+			}
+			for (var i=0; i<btns.length; i++){
+				btns[i].className = "";//所有按钮样式清空；
+			}
+			hide(lastImg);
+
+			show(imgs[this.index]);
+			lastImg = imgs[this.index];
+			
+			btns[this.index].className = "active";
+		}
+	}
+}	
+
+/*思路性的东西：
+	一个id为banner的div含有一个id为wrap的ul和一个id为btnwrap的ul，
+wrap中的li相对于wrap进行绝对定位使背景图进行重叠；btnwrap相对于banner进行绝对定位，
+在右下角显示，其中的li进行浮动排列；
+
+
+
+*/
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
